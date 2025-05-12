@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class EmployeeService {
@@ -20,4 +21,14 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public void registerANewEmployee(Employee employee) {
+
+        Optional<Employee> existingEmployee = employeeRepository.findEmployeeByEmail(employee.getEmployeeEmail());
+        System.out.println(existingEmployee);
+        if(existingEmployee.isPresent()) {
+            throw new IllegalStateException("Email already exist");
+        }
+
+        employeeRepository.save(employee);
+    }
 }
