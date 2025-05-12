@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/employee")
@@ -19,6 +20,11 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getAllEmployee() {
         return employeeService.findAllEmployees();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Employee> getAEmployeeById(@PathVariable Long id) {
+        return employeeService.findEmployeeById(id);
     }
 
     @PostMapping("/add")
