@@ -21,12 +21,9 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> findEmployeeById(Long id) {
-        Optional<Employee> matchingEmployee = employeeRepository.findById(id);
-        if(matchingEmployee.isEmpty()) {
-            throw new IllegalStateException("Not a valid id");
-        }
-        return matchingEmployee;
+    public Employee findEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Not a valid id."));
     }
 
     public void registerANewEmployee(Employee employee) {
