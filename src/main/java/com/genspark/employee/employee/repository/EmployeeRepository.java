@@ -1,5 +1,6 @@
-package com.genspark.employee.employee;
+package com.genspark.employee.employee.repository;
 
+import com.genspark.employee.employee.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

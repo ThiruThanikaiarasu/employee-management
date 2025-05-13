@@ -1,9 +1,10 @@
-package com.genspark.employee.employee;
+package com.genspark.employee.employee.service;
 
+import com.genspark.employee.employee.Employee;
+import com.genspark.employee.employee.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

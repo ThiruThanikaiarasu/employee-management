@@ -1,5 +1,7 @@
-package com.genspark.employee.employee;
+package com.genspark.employee.employee.configuration;
 
+import com.genspark.employee.employee.Employee;
+import com.genspark.employee.employee.repository.EmployeeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,7 @@
-package com.genspark.employee.employee;
+package com.genspark.employee.employee.controller;
 
+import com.genspark.employee.employee.Employee;
+import com.genspark.employee.employee.service.EmployeeService;
 import com.genspark.employee.employee.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
