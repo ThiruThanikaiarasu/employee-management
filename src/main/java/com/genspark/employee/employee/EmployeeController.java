@@ -23,12 +23,22 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getAEmployeeById(@PathVariable Long id) {
-        return employeeService.findEmployeeById(id);
+    public Employee getAEmployeeById(@PathVariable("id") Long employeeId) {
+        return employeeService.findEmployeeById(employeeId);
     }
 
     @PostMapping("/add")
     public void addANewEmployee(@RequestBody Employee employee) {
         employeeService.registerANewEmployee(employee);
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public void deleteAnEmployee(@PathVariable("id") Long employeeId) {
+        employeeService.removeAEmployee(employeeId);
+    }
+
+    @PutMapping(path = "/update/{id}")
+    public void updateAnEmployee(@PathVariable("id") Long employeeId,@RequestParam String employeeName, String employeeEmail) {
+        employeeService.updateAnEmployee(employeeId, employeeName,employeeEmail);
     }
 }
