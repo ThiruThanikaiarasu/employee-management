@@ -1,12 +1,12 @@
 package com.genspark.employee.employee;
 
+import com.genspark.employee.employee.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/employee")
@@ -20,61 +20,74 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity getAllEmployee() {
-        ResponseEntity result;
+    public ResponseEntity<ApiResponse<List<Employee>>> getAllEmployee() {
+        ResponseEntity<ApiResponse<List<Employee>>> result;
         try {
             List<Employee> employees = employeeService.findAllEmployees();
-            result = ResponseEntity.ok(employees);
-        } catch(Exception e) {
-            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            ApiResponse<List<Employee>> response = new ApiResponse<>("Employees fetched successfully", employees, null);
+            result = ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<List<Employee>> response = new ApiResponse<>("Failed to fetch employees", null, e.getMessage());
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return result;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getAEmployeeById(@PathVariable("id") Long employeeId) {
-        ResponseEntity result;
+    public ResponseEntity<ApiResponse<Employee>> getAEmployeeById(@PathVariable("id") Long employeeId) {
+        ResponseEntity<ApiResponse<Employee>> result;
         try {
             Employee employee = employeeService.findEmployeeById(employeeId);
-            result = ResponseEntity.ok(employee);
+            ApiResponse<Employee> response = new ApiResponse<>("Employee fetched successfully", employee, null);
+            result = ResponseEntity.ok(response);
         } catch (Exception e) {
-            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            ApiResponse<Employee> response = new ApiResponse<>("Failed to fetch employee", null, e.getMessage());
+            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return result;
     }
 
     @PostMapping("/add")
-    public ResponseEntity addANewEmployee(@RequestBody Employee employee) {
-        ResponseEntity result;
+    public ResponseEntity<ApiResponse<Void>> addANewEmployee(@RequestBody Employee employee) {
+        ResponseEntity<ApiResponse<Void>> result;
         try {
             employeeService.registerANewEmployee(employee);
-            result = ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
+            ApiResponse<Void> response = new ApiResponse<>("Employee created successfully", null, null);
+            result = ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            ApiResponse<Void> response = new ApiResponse<>("Failed to create employee", null, e.getMessage());
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return result;
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity deleteAnEmployee(@PathVariable("id") Long employeeId) {
-        ResponseEntity result;
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteAnEmployee(@PathVariable("id") Long employeeId) {
+        ResponseEntity<ApiResponse<Void>> result;
         try {
             employeeService.removeAEmployee(employeeId);
-            result = ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            ApiResponse<Void> response = new ApiResponse<>("Employee deleted successfully", null, null);
+            result = ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);// 204 typically has no body
         } catch (Exception e) {
-            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            ApiResponse<Void> response = new ApiResponse<>("Failed to delete employee", null, e.getMessage());
+            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return result;
     }
 
-    @PutMapping(path = "/update/{id}")
-    public ResponseEntity updateAnEmployee(@PathVariable("id") Long employeeId,@RequestParam String employeeName, String employeeEmail) {
-        ResponseEntity result;
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse<Void>> updateAnEmployee(
+            @PathVariable("id") Long employeeId,
+            @RequestParam String employeeName,
+            @RequestParam String employeeEmail) {
+        ResponseEntity<ApiResponse<Void>> result;
         try {
             employeeService.updateAnEmployee(employeeId, employeeName, employeeEmail);
-            result = ResponseEntity.ok("Employee updated successfully");
+            ApiResponse<Void> response = new ApiResponse<>("Employee updated successfully", null, null);
+            result = ResponseEntity.ok(response);
         } catch (Exception e) {
-            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            ApiResponse<Void> response = new ApiResponse<>("Failed to update employee", null, e.getMessage());
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return result;
     }
