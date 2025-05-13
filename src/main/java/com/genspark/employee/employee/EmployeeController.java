@@ -1,6 +1,8 @@
 package com.genspark.employee.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,27 +20,62 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getAllEmployee() {
-        return employeeService.findAllEmployees();
+    public ResponseEntity getAllEmployee() {
+        ResponseEntity result;
+        try {
+            List<Employee> employees = employeeService.findAllEmployees();
+            result = ResponseEntity.ok(employees);
+        } catch(Exception e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return result;
     }
 
     @GetMapping("/{id}")
-    public Employee getAEmployeeById(@PathVariable("id") Long employeeId) {
-        return employeeService.findEmployeeById(employeeId);
+    public ResponseEntity getAEmployeeById(@PathVariable("id") Long employeeId) {
+        ResponseEntity result;
+        try {
+            Employee employee = employeeService.findEmployeeById(employeeId);
+            result = ResponseEntity.ok(employee);
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return result;
     }
 
     @PostMapping("/add")
-    public void addANewEmployee(@RequestBody Employee employee) {
-        employeeService.registerANewEmployee(employee);
+    public ResponseEntity addANewEmployee(@RequestBody Employee employee) {
+        ResponseEntity result;
+        try {
+            employeeService.registerANewEmployee(employee);
+            result = ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return result;
     }
 
     @DeleteMapping(path = "/delete/{id}")
-    public void deleteAnEmployee(@PathVariable("id") Long employeeId) {
-        employeeService.removeAEmployee(employeeId);
+    public ResponseEntity deleteAnEmployee(@PathVariable("id") Long employeeId) {
+        ResponseEntity result;
+        try {
+            employeeService.removeAEmployee(employeeId);
+            result = ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return result;
     }
 
     @PutMapping(path = "/update/{id}")
-    public void updateAnEmployee(@PathVariable("id") Long employeeId,@RequestParam String employeeName, String employeeEmail) {
-        employeeService.updateAnEmployee(employeeId, employeeName,employeeEmail);
+    public ResponseEntity updateAnEmployee(@PathVariable("id") Long employeeId,@RequestParam String employeeName, String employeeEmail) {
+        ResponseEntity result;
+        try {
+            employeeService.updateAnEmployee(employeeId, employeeName, employeeEmail);
+            result = ResponseEntity.ok("Employee updated successfully");
+        } catch (Exception e) {
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return result;
     }
 }
